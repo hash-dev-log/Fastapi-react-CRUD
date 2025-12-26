@@ -1,0 +1,5 @@
+tortoise-orm[psycopg]
+# tortoise
+asyncpg
+connections
+uvicorn
