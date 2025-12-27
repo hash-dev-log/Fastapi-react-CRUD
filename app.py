@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
-from models import (supplier_pydantic, supplier_pydanticIn, Supplier)
+from models import supplier_pydantic, supplier_pydanticIn, Supplier, product_pydantic, product_pydanticIn, Product
 
 app = FastAPI()
 
@@ -20,7 +20,7 @@ async def add_supplier(supplier_info: supplier_pydanticIn):
     # exclude= True so we exclude the fields that are not provided
     supplier_obj = await Supplier.create(**supplier_info.dict(exclude_unset=True))
 
-    #this is gonna add our supplier to the database
+    
     # serializing an instance of the data
     response = await supplier_pydantic.from_tortoise_orm(supplier_info)
 
@@ -54,6 +54,18 @@ async def delete_supplier(supplier_id:int):
     
     return {'status': "ok", "message" : "deleted: {response}"  }
 
+@app.get('/product')
+async def get_all_products():
+    response = await product_pydantic.from_queryset() 
+
+    return {"status": "ok", "data": response}
+
+@app.post('/product')
+async def add_product(product_info : product_pydanticIn):
+    # we gotta tell the product class to create it. SO creating an class instance
+    product_obj = await Product.create(**product_info.dict(exclude_unset=True))
+
+    response = await product_pydantic.from_tortoise_orm(supplier_info)
 
 
 # we gonna use async here cuz we will have to wait for db

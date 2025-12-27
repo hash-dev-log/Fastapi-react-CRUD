@@ -1,3 +1,5 @@
+#pip install -r ./requirements.txt 
+FastAPI[standard]
 tortoise-orm[psycopg]
 # tortoise
 asyncpg
